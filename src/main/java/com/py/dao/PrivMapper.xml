@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.py.dao.PrivDao">
+	<select id="selectPrivByAid" resultType="Priv">
+		select pid,pclass,purl,by001,by002,by003,by004,by005,updatetime,updateuser
+			from tc_priv where pid in
+				(select pid from tc_role_priv where rid in
+					(select rid from tc_admin_role where aid=#{aid}))
+	</select>
+	<select id="selectPrivByRid" resultType="Priv">
+		select pid,pclass,purl,by001,by002,by003,by004,by005,updatetime,updateuser
+			from tc_priv where pid in
+				(select pid from tc_role_priv where rid=#{rid})
+	</select>
+	<select id="selectAllPrivs" resultType="Priv">
+		select pid,pclass,purl,by001,by002,by003,by004,by005,createtime,createuser,updatetime,updateuser from tc_priv
+	</select>
+	<insert id="insertPrivByRid">
+		insert into tc_role_priv(rid,pid) values
+			<foreach collection="lp" item="lp" separator=",">
+			(
+			#{rid},
+			#{lp.pid}
+			)
+			</foreach>
+	</insert>
+	<delete id="deletePrivsByRid">
+		delete from tc_role_priv where rid=#{rid}
+	</delete>
+</mapper>

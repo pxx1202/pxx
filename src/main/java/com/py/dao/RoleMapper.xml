@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.py.dao.RoleDao">
+	<select id="selectRoleByAid" resultType="Role">
+		select rid,rname,by001,by002,by003,by004,by005,createtime,createuser,updatetime,updateuser
+				from tc_role where rid in(select rid from tc_admin_role where aid=#{aid})
+	</select>
+	<select id="selectRoleByRid" resultType="Role">
+		select rid,rname,by001,by002,by003,by004,by005,createtime,createuser,updatetime,updateuser from tc_role where rid=#{rid}
+	</select>
+	<select id="selectAllRoles" resultType="Role">
+		select rid,rname,by001,by002,by003,by004,by005,createtime,createuser,updatetime,updateuser from tc_role
+	</select>
+	<insert id="insertRole" useGeneratedKeys="true" keyProperty="rid" keyColumn="rid">
+		insert into tc_role(rname) values(#{rname})
+	</insert>
+	<update id="updateRoleInfoByRid">
+		update tc_role set rname=#{rname} where rid=#{rid}
+	</update>
+	<delete id="deleteRoleByRid">
+		delete from tc_role where rid=#{rid}
+	</delete>
+	<insert id="insertRolesByAdmin">
+		insert into tc_admin_role(aid,rid,createtime,createuser) values
+		<foreach collection="lr" item="role" separator=",">
+			(
+			#{aid},
+			#{role.rid},
+			now(),
+			'sys'
+			)
+		</foreach>
+		
+	</insert>
+	<delete id="deleteRolesByAid">
+		delete from tc_admin_role where aid=#{aid}
+	</delete>
+</mapper>

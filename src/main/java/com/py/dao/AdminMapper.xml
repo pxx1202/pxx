@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.py.dao.AdminDao">
+	<resultMap type="Admin" id="adminresultMap">
+		<id property="aid" column="aid"/>
+		<result property="aname" column="aname"/>
+		<result property="acname" column="acname"/>
+		<result property="apwd" column="apwd"/>
+		<result property="atel" column="atel"/>
+		<result property="aemail" column="aemail"/>
+		<result property="by001" column="by001"/>
+		<result property="by002" column="by002"/>
+		<result property="by003" column="by003"/>
+		<result property="by004" column="by004"/>
+		<result property="createtime" column="createtime"/>
+		<result property="createuser" column="createuser"/>
+		<result property="updatetime" column="updatetime"/>
+		<result property="updateuser" column="updateuser"/>
+		<collection property="lp" column="aid" select="com.py.dao.PrivDao.selectPrivByAid"/>
+		<collection property="lr" column="aid" select="com.py.dao.RoleDao.selectRoleByAid"/>
+	</resultMap>
+	
+	<select id="selectAdminByName" resultMap="adminresultMap">
+		select aid,aname,acname,apwd,atel,aemail,by001,by002,by003,by004,createtime,createuser,updatetime,updateuser
+			from tc_admin where acname=#{acname} and apwd=#{apwd}
+	</select>
+	<update id="updateAdminInfo">
+		update tc_admin set aname=#{aname},atel=#{atel},aemail=#{aemail},updateuser='user' where aid=#{aid}
+	</update>
+	<update id="updateAdminPwd">
+		update tc_admin set apwd=${apwd} where aid=#{aid}
+	</update> 
+	<select id="selectAllAdmin" resultMap="adminresultMap">
+		select aid,aname,acname,apwd,atel,aemail,by001,by002,by003,by004,createtime,createuser,updatetime,updateuser from tc_admin
+	</select>
+	<delete id="deleteAdminByAid">
+		delete from tc_admin where aid=#{aid}
+	</delete>
+	<insert id="insertAdmin" useGeneratedKeys="true" keyProperty="aid" keyColumn="aid">
+		insert into tc_admin(aname,acname,apwd,atel,aemail,by001,createtime,createuser) values(#{aname},#{acname},#{apwd},#{atel},#{aemail},#{by001},now(),'sys')
+	</insert>
+	<select id="selectAdminInfoByaid" resultType="Admin">
+		select aid,aname,acname,apwd,atel,aemail,by001,by002,by003,by004,createtime,createuser,updatetime,updateuser
+				 from tc_admin where aid=#{aid}
+	</select>
+</mapper>    
