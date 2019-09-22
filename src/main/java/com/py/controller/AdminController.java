@@ -22,7 +22,7 @@ import com.py.service.AdminService;
 import com.py.service.RoleService;
 import com.py.service.impl.AdminServiceImpl;
 import com.py.service.impl.RoleServiceImpl;
-
+//添加一个注解
 @Controller
 @RequestMapping("/admin")
 @SessionAttributes("admin")
